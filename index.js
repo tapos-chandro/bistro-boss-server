@@ -131,8 +131,10 @@ async function run() {
 
     app.get('/users', verifyToken, async(req,res) =>{
       const user = req.headers.authorization
+      console.log(user)
       const result = await usersCollection.find().toArray()
       res.send(result)
+      
     })
 
     app.post('/users', async(req, res) =>{
