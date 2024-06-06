@@ -338,14 +338,14 @@ async function run() {
           const updateResult = await orderDetailsCollection.updateMany(query, updateDoc);
           console.log(updateResult)
           if(updateResult?.acknowledged === true){
-            res.redirect(`http://localhost:5173/dashboard/successPay/${req.params.tranId}`)
+            res.redirect(`https://bistro-boss-3473d.web.app/dashboard/successPay/${req.params.tranId}`)
           }
           
         }else{
           const finalPaymentResult = await orderDetailsCollection.insertOne(orderDetails)
           console.log(finalPaymentResult)
         if(finalPaymentResult?.acknowledged === true){
-          res.redirect(`http://localhost:5173/dashboard/successPay/${req.params.tranId}`)
+          res.redirect(`https://bistro-boss-3473d.web.app/dashboard/successPay/${req.params.tranId}`)
         }
         }
           
