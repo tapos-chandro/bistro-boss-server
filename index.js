@@ -247,7 +247,7 @@ async function run() {
           total_amount: paymentData?.totalPrice,
           currency: 'BDT',
           tran_id: tranId,
-          success_url: `http://localhost:5000/dashboard/successPay/${tranId}`,
+          success_url: `https://bistro-boss-server-5u30.onrender.com/dashboard/successPay/${tranId}`,
           fail_url: 'http://localhost:3030/fail',
           cancel_url: 'http://localhost:3030/cancel',
           ipn_url: 'http://localhost:3030/ipn',
