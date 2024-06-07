@@ -8,24 +8,10 @@ require('dotenv').config()
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const SSLCommerzPayment = require('sslcommerz-lts')
 
-app.use(cors({ origin: 'https://bistro-boss-3473d.web.app' }));
+app.use(cors());
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true })) 
-
-
-
-app.use(function (req, res, next) {
-  //Enabling CORS
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type,")
-    next();
-  });
-
-
-
-
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.elvxgab.mongodb.net/?retryWrites=true&w=majority`;
@@ -86,9 +72,6 @@ async function run() {
       const result = await cartsCollection.find(query).toArray()
       res.send(result)
     })
-
-
-
 
     // jwt related api 
 
@@ -239,7 +222,6 @@ async function run() {
 
       const tranId = new ObjectId().toString()
       const paymentData = req.body
-      // console.log('paymentData',paymentData)
 
       const query = {_id:{
         $in:paymentData?._id?.map(id => new ObjectId(id))
@@ -279,10 +261,8 @@ async function run() {
       const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live)
       sslcz.init(data).then(apiResponse => {
       
-          // Redirect the user to payment gateway
           let GatewayPageURL = apiResponse.GatewayPageURL
           res.send(GatewayPageURL)
-          // console.log('Redirecting to: ', GatewayPageURL)
           
 
       });
@@ -294,15 +274,9 @@ async function run() {
           },
         };
 
-
-      
-
       const insertResult = await orderCollection.insertMany(findResult)
-      // console.log(insertResult)
       const result = await orderCollection.updateMany(query, updateDoc)
-      // console.log('addd date result',result)
       const deleteResult = await cartsCollection.deleteMany(query)
-      // console.log(deleteResult)
 
 
 
@@ -346,13 +320,10 @@ async function run() {
           
         }else{
           const finalPaymentResult = await orderDetailsCollection.insertOne(orderDetails)
-          console.log(finalPaymentResult)
         if(finalPaymentResult?.acknowledged === true){
           res.redirect(`https://bistro-boss-3473d.web.app/dashboard/successPay/${req.params.tranId}`)
         }
         }
-          
-         
       })
   })
   
@@ -374,24 +345,6 @@ async function run() {
   })
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
@@ -400,16 +353,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
-
-
-
-
-
-
-
-
-
 
   app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
