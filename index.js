@@ -8,7 +8,8 @@ require('dotenv').config()
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const SSLCommerzPayment = require('sslcommerz-lts')
 
-app.use(cors())
+app.use(cors({ origin: 'https://bistro-boss-3473d.web.app' }));
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true })) 
 
@@ -160,6 +161,7 @@ async function run() {
 
     app.put('/users/Admin', async(req,res) =>{
       const id = req.query.id
+      console.log(id)
       const filter = {_id: new ObjectId(id)}
       const updateDoc = {
         $set: {
